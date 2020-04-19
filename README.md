@@ -32,9 +32,9 @@ Requisiti:
 * python 3 con numpy(libreria per operazioni matematiche) e matplotlib(visualizzazione grafici)
 
 ## Indice
-* [Video 1: Intro e codice di un neurone](#video_1_Intro_e_codice_di_un_neurone)
+* [Video 1: Intro e codice di un neurone](#video-1-intro-e-codice-di-un-neurone)
 	* [Codice](code/01_neurone.py)
-* [Video 2: codificare un livello](#video_2_codificare_un_livello)
+* [Video 2: codificare un livello](#video-2-codificare-un-livello)
 	* [Codice](code/02_livello.py)
 * [Changelog](#changelog)
 
@@ -53,6 +53,8 @@ a tutti gli altri risultati di moltiplicazione dato-peso.
 Infine questo dato viene sommato ad un errore statistico("bias") e
 viene passato ad una funzione di attivazione ("activation function").
 > l'attivazione e' la simulazione dell'impulso di un neurone naturale
+
+![](assets/svg/01-neurone_generico.svg)
 
 Questo passaggio viene ripetuto per tutti gli strati (i "layer").
 
@@ -81,12 +83,15 @@ La parte piu' difficile da capire di una rete neurale e' come
 modificare i pesi dei singoli collegamenti.
 
 ### Codice di un neurone
+
+![](assets/svg/01-neurone_calcoli.svg)
+
 Consideriamo 3 neuroni che mandano il proprio
 output al nostro neurone:
 ```python
 inputs = [1.2, # output neurone 1
           5.1, # output neurone 2
-		  2.1  # output neurone 3
+          2.1  # output neurone 3
 ]
 ```
 
@@ -96,7 +101,7 @@ ognuno con il proprio peso:
 ```python
 weights = [3.1, # peso collegamento neurone 1 - nostro neurone
            2.1, # peso collegamento neurone 2 - nostro neurone
-		   8.7  # peso collegamento neurone 3 - nostro neurone
+           8.7  # peso collegamento neurone 3 - nostro neurone
 ]
 ```
 
@@ -118,20 +123,20 @@ Codice completo:
 ```python
 inputs = [1.2, # output neurone 1
           5.1, # output neurone 2
-		  2.1  # output neurone 3
+          2.1  # output neurone 3
 ]
 
 weights = [3.1, # peso collegamento neurone 1 - nostro neurone
            2.1, # peso collegamento neurone 2 - nostro neurone
-		   8.7  # peso collegamento neurone 3 - nostro neurone
+           8.7  # peso collegamento neurone 3 - nostro neurone
 ]
 
 bias = 3 # errore statistico
 
 output = (inputs[0] * weights[0] +  # dato neurone 1 moltiplicato per peso collegamento 
           inputs[1] * weights[1] +  # dato neurone 2 moltiplicato per peso collegamento
-		  inputs[2] * weights[2] +  # dato neurone 3 moltiplicato per peso collegamento
-		  bias)                     # tutte moltiplicazioni sommate insieme con l'errore statistico.
+          inputs[2] * weights[2] +  # dato neurone 3 moltiplicato per peso collegamento
+          bias)                     # tutte moltiplicazioni sommate insieme con l'errore statistico.
 ```
 > Il codice completo e' disponibile al percorso: [```code/01_neurone.py```](code/01_neurone.py)
 
@@ -142,6 +147,8 @@ output = (inputs[0] * weights[0] +  # dato neurone 1 moltiplicato per peso colle
 ## Video 2: codificare un livello
 > Link: https://www.youtube.com/watch?v=lGLto9Xd7bU
 
+![](assets/svg/02-layer_calcoli.svg)
+
 Il video inizia partendo dal codice dell'altra volta (con valori modificati):
 > Nota: i numeri sono inventati quindi il fatto che siano
         diversi non implica ragionamenti diversi sul funzionamento del neurone
@@ -149,20 +156,20 @@ Il video inizia partendo dal codice dell'altra volta (con valori modificati):
 ```python
 inputs = [1, # output neurone 1
           2, # output neurone 2
-		  3  # output neurone 3
+          3  # output neurone 3
 ]
 
 weights = [0.2,  # peso collegamento neurone 1 - nostro neurone
            0.8,  # peso collegamento neurone 2 - nostro neurone
-		   -0.5  # peso collegamento neurone 3 - nostro neurone
+           -0.5  # peso collegamento neurone 3 - nostro neurone
 ]
 
 bias = 2 # errore statistico
 
 output = (inputs[0] * weights[0] +  # dato neurone 1 moltiplicato per peso collegamento 
           inputs[1] * weights[1] +  # dato neurone 2 moltiplicato per peso collegamento
-		  inputs[2] * weights[2] +  # dato neurone 3 moltiplicato per peso collegamento
-		  bias)                     # tutte moltiplicazioni sommate insieme con l'errore statistico.
+          inputs[2] * weights[2] +  # dato neurone 3 moltiplicato per peso collegamento
+          bias)                     # tutte moltiplicazioni sommate insieme con l'errore statistico.
 ```
 
 Gli input del neurone possono provvenire dall'input layer (valori "presi dalla realta'")
@@ -181,68 +188,68 @@ Considerando 3 neuroni con quattro input, ogni neurone ha:
 Dove l'input per ogni neurone e':
 ```python
 inputs = [1,  # input 1
-		  2,  # input 2
-		  3,  # input 3
-		  2.5 # input 4
+          2,  # input 2
+          3,  # input 3
+          2.5 # input 4
 ]
 ```
 
 In codice:
 * i "set di pesi" sono 3:
-	```python
-	# pesi collegamenti verso il neurone 1
-	weights1 = [0.2,  # peso collegamento input 1 - neurone 1
-				0.8,  # peso collegamento input 2 - neurone 1
-				-0.5, # peso collegamento input 3 - neurone 1
-				1.0   # peso collegamento input 4 - neurone 1
-	]
+    ```python
+    # pesi collegamenti verso il neurone 1
+    weights1 = [0.2,  # peso collegamento input 1 - neurone 1
+                0.8,  # peso collegamento input 2 - neurone 1
+                -0.5, # peso collegamento input 3 - neurone 1
+                1.0   # peso collegamento input 4 - neurone 1
+    ]
 
-	# pesi collegamenti verso il neurone 2
-	weights2 = [0.5,   # peso collegamento input 1 - neurone 2
-				-0.91, # peso collegamento input 2 - neurone 2
-				0.26,  # peso collegamento input 3 - neurone 2
-				-0.5   # peso collegamento input 4 - neurone 2
-	]
+    # pesi collegamenti verso il neurone 2
+    weights2 = [0.5,   # peso collegamento input 1 - neurone 2
+                -0.91, # peso collegamento input 2 - neurone 2
+                0.26,  # peso collegamento input 3 - neurone 2
+                -0.5   # peso collegamento input 4 - neurone 2
+    ]
 
-	# pesi collegamenti verso il neurone 3
-	weights3 = [-0.26, # peso collegamento input 1 - neurone 3
-				-0.27, # peso collegamento input 2 - neurone 3
-				0.17,  # peso collegamento input 3 - neurone 3
-				0.87   # peso collegamento input 4 - neurone 3
-	]
-	```
+    # pesi collegamenti verso il neurone 3
+    weights3 = [-0.26, # peso collegamento input 1 - neurone 3
+                -0.27, # peso collegamento input 2 - neurone 3
+                0.17,  # peso collegamento input 3 - neurone 3
+                0.87   # peso collegamento input 4 - neurone 3
+    ]
+    ```
 * i bias sono 3:
-	```python
-	bias1 = 2 # errore statistico neurone 1
+    ```python
+    bias1 = 2 # errore statistico neurone 1
 
-	bias2 = 3 # errore statistico neurone 2
+    bias2 = 3 # errore statistico neurone 2
 
-	bias3 = 0.5 # errore statistico neurone 3
-	```
+    bias3 = 0.5 # errore statistico neurone 3
+    ```
 
 Se abbiamo 3 neuroni, e ogni neurone ha 1 output, otterremo un set di 3 output:
 ```python
 output = [  # CALCOLO OUTPUT NEURONE 1
-	           (inputs[0] * weights1[0] + # dato input 1 moltiplicato per peso collegamento al neurone 1 
+               (inputs[0] * weights1[0] + # dato input 1 moltiplicato per peso collegamento al neurone 1 
                 inputs[1] * weights1[1] + # dato input 2 moltiplicato per peso collegamento al neurone 1
-		        inputs[2] * weights1[2] + # dato input 3 moltiplicato per peso collegamento al neurone 1
-				inputs[3] * weights1[3] + # dato input 4 moltiplicato per peso collegamento al neurone 1
-		        bias1),                   # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 1.
-		        
-		        # CALCOLO OUTPUT NEURONE 2
-		       (inputs[0] * weights2[0] + # dato input 1 moltiplicato per peso collegamento al neurone 2 
+                inputs[2] * weights1[2] + # dato input 3 moltiplicato per peso collegamento al neurone 1
+                inputs[3] * weights1[3] + # dato input 4 moltiplicato per peso collegamento al neurone 1
+                bias1),                   # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 1.
+
+                # CALCOLO OUTPUT NEURONE 2
+               (inputs[0] * weights2[0] + # dato input 1 moltiplicato per peso collegamento al neurone 2 
                 inputs[1] * weights2[1] + # dato input 2 moltiplicato per peso collegamento al neurone 2
-		        inputs[2] * weights2[2] + # dato input 3 moltiplicato per peso collegamento al neurone 2
-				inputs[3] * weights2[3] + # dato input 4 moltiplicato per peso collegamento al neurone 2
-		        bias2),                 + # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 2.
-		        
-		        # CALCOLO OUTPUT NEURONE 3
-		       (inputs[0] * weights3[0] + # dato input 1 moltiplicato per peso collegamento al neurone 3 
+                inputs[2] * weights2[2] + # dato input 3 moltiplicato per peso collegamento al neurone 2
+                inputs[3] * weights2[3] + # dato input 4 moltiplicato per peso collegamento al neurone 2
+                bias2),                 + # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 2.
+
+                # CALCOLO OUTPUT NEURONE 3
+               (inputs[0] * weights3[0] + # dato input 1 moltiplicato per peso collegamento al neurone 3 
                 inputs[1] * weights3[1] + # dato input 2 moltiplicato per peso collegamento al neurone 3
-		        inputs[2] * weights3[2] + # dato input 3 moltiplicato per peso collegamento al neurone 3
-				inputs[3] * weights3[3] + # dato input 4 moltiplicato per peso collegamento al neurone 3
-		        bias3),                   # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 3.
-    ]
+                inputs[2] * weights3[2] + # dato input 3 moltiplicato per peso collegamento al neurone 3
+                inputs[3] * weights3[3] + # dato input 4 moltiplicato per peso collegamento al neurone 3
+                bias3),                   # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 3.
+]
 ```
 
 Output dei neuroni: ```[4.8, 1.21, 2.385]```
@@ -260,6 +267,11 @@ Questa parte verra' trattata nei prossimi video
 
 
 ## Changelog
+
+**Commit 2 2020-04-19:** <br>
+* Sostituiti i tab in spazi (README e codice)
+* Sistemati i link nell'indice
+* Aggiunte immagini relative ai primi due video
 
 **Commit 1 2020-04-19:** <br>
 Primo commit: primi due 2 video
