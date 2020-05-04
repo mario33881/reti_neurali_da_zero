@@ -1,5 +1,7 @@
 # Reti neurali da zero
 
+![Spellcheck](https://github.com/mario33881/reti_neurali_da_zero/workflows/Spellcheck/badge.svg)
+
 Appunti e traduzione della serie "Neural Networks from Scratch"
 su Youtube di sentdex: [clicca qui per accedere al suo canale Youtube](https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ)
 
@@ -49,6 +51,11 @@ Requisiti:
     * [Codice video 2 dinamico](code/03.1_livello_codice_dinamico.py)
     * [Codice video 1 numpy](code/03.2_neurone_numpy.py)
     * [Codice video 2 numpy](code/03.3_livello_numpy.py)
+* [Video 4: Batch, livelli e programmazione ad oggetti](#video-4-batch-livelli-e-programmazione-ad-oggetti)
+    * [Video](https://www.youtube.com/watch?v=TEWy9vZcxW4)
+    * [Codice input in batch(gruppi)](code/04.1_batch_input.py)
+    * [Codice 2 layer](code/04.2_due_layer.py)
+    * [Codice 2 layer in programmazione ad oggetti](code/04.3_oggetto_layer.py)
 * [Changelog](#changelog)
 
 > Nota 1: clicca sui titoli esterni per andare nelle sezioni
@@ -534,9 +541,371 @@ prodotto interno 2 con errore stat. 2
 
 [Torna all'indice](#indice)
 
+---
+
+## Video 4: Batch, livelli e programmazione ad oggetti
+> Link: https://www.youtube.com/watch?v=TEWy9vZcxW4
+
+Convertire il codice in batch permette di parallelizzare
+i calcoli...
+> piu' batch permettono piu' parallelizzazioni e per eseguire
+> i calcoli nel deep learning si preferisce utilizzare la potenza di calcolo delle schede video
+> perche' hanno piu' core rispetto a un processore
+
+...e permette di generalizzare (generalization)
+il sistema: la rete neurale non si adattera' ad un singolo set
+di input ma imparera' da piu' set di dati.
+
+Non bisogna esagerare con la dimensione del batch:
+passandogli tutti i set la rete neurale si adattera' perfettamente
+solo a comprendere i dati del set stesso con cui sta "imparando"
+e nel momento in cui gli passiamo dati mai visti otterremo un pessimo risultato.
+
+Una dimensione tipica del batch e' 32 o 64, raramente 128 sample.
+
+Riprendendo il codice dell'altro video:
+```python
+# possiamo richiamare oggetti (funzioni,...) numpy facendo np.x(),...
+import numpy as np
+
+inputs = [1, 2, 3, 2.5]
+weights = [
+    [
+        0.2,  # peso collegamento input 1 - neurone 1
+        0.8,  # peso collegamento input 2 - neurone 1
+        -0.5, # peso collegamento input 3 - neurone 1
+        1.0   # peso collegamento input 4 - neurone 1
+    ],
+
+    # pesi collegamenti verso il neurone 2
+    [
+        0.5,   # peso collegamento input 1 - neurone 2
+        -0.91, # peso collegamento input 2 - neurone 2
+        0.26,  # peso collegamento input 3 - neurone 2
+        -0.5   # peso collegamento input 4 - neurone 2
+    ],
+
+    # pesi collegamenti verso il neurone 3
+    [
+        -0.26, # peso collegamento input 1 - neurone 3
+        -0.27, # peso collegamento input 2 - neurone 3
+        0.17,  # peso collegamento input 3 - neurone 3
+        0.87   # peso collegamento input 4 - neurone 3
+    ]
+]
+
+
+biases = [2,   # errore statistico neurone 1
+          3,   # errore statistico neurone 2
+          0.5  # errore statistico neurone 3
+]
+
+# prodotto interno
+output = np.dot(weights, inputs) + biases
+```
+
+Per aumentare i batch occorre rendere la lista di input...
+```python
+inputs = [1, 2, 3, 2.5]
+```
+
+una matrice: ho piu' set/sample di input
+```python
+inputs = [
+    [1, 2, 3, 2.5],         # set 1 di input
+    [2.0, 5.0, -1.0, 2.0],  # set 2 di input
+    [-1.5, 2.7, 2.2, -0.8]  # set 3 di input
+]
+```
+
+Per calcolare il prodotto interno tra matrici occorre: 
+* prendere la prima lista degli input e farne il prodotto interno con la prima colonna dei pesi
+* prendere la prima lista degli input e farne il prodotto interno con la seconda colonna dei pesi
+* ...
+* dopo aver finito i calcoli dei prodotti interni tra la prima lista degli input e le colonne dei pesi
+si passa a calcolare la seconda lista degli input per la prima colonna dei pesi, ecc... 
+
+Il risultato e' un'altra matrice.
+
+
+Se si tenta di eseguire il codice sopra dara' un errore di shaping:
+* la matrice di input ha come shaping (3, 4) perche' contiene 3 set di 4 input
+* la matrice di pesi ha come shaping (3, 4) perche' contiene 3 set di 4 pesi
+* nel momento in cui si esegue il prodotto interno tra le matrici il programma cerca 
+fare il prodotto interno di 4 pesi per i 3 set, causando errore (devono essere omologhi)
+
+> il problema si presenta anche se tento di modificare l'ordine di parametri passati
+> a np.dot() perche' le shape rimangono uguali
+
+Per risolvere questo problema occorre invertire le righe e le colonne dei pesi per riottenere
+la parita' di elementi con cui fare il prodotto interno.
+
+Il processo che inverte righe e colonne si chiama "transpose".
+
+Per farlo bisogna cambiare il codice:
+```python
+output = np.dot(inputs, weights) + biases
+# oppure
+# output = np.dot(weights, inputs) + biases
+```
+In:
+```python
+output = np.dot(inputs, np.array(weights).T) + biases
+```
+Dove: 
+* ```np.array()``` converte la lista python in un array di numpy
+* la ```.T``` in ```np.array(weights).T``` scambia righe e colonne
+* la somma degli errori statistici prende le singole righe del prodotto interno
+tra matrici e somma ogni elemento con l'errore statistico dello stesso indice
+(primo elemento della prima riga sommato al primo errore statistico, 
+secondo elemento prima riga sommato al secondo errore statistico,
+...,
+primo elemento della seconda riga sommato al primo errore statistico,
+ecc...)
+
+> Il codice completo e' disponibile al percorso: [```code/04.1_batch_input.py```](code/04.1_batch_input.py)
+
+### due layer
+Senza usare la programmazione ad oggetti occorre
+duplicare i pesi e gli errori statistici
+```python
+# possiamo richiamare oggetti (funzioni,...) numpy facendo np.x(),...
+import numpy as np
+
+inputs = [
+    [1, 2, 3, 2.5],         # set 1 di input
+    [2.0, 5.0, -1.0, 2.0],  # set 2 di input
+    [-1.5, 2.7, 2.2, -0.8]  # set 3 di input
+]
+
+# pesi del layer 1
+weights = [
+    # pesi collegamenti verso il neurone 1
+    [
+        0.2,  # peso collegamento input 1 - neurone 1 (layer 1)
+        0.8,  # peso collegamento input 2 - neurone 1 (layer 1)
+        -0.5, # peso collegamento input 3 - neurone 1 (layer 1)
+        1.0   # peso collegamento input 4 - neurone 1 (layer 1)
+    ],
+
+    # pesi collegamenti verso il neurone 2
+    [
+        0.5,   # peso collegamento input 1 - neurone 2 (layer 1)
+        -0.91, # peso collegamento input 2 - neurone 2 (layer 1)
+        0.26,  # peso collegamento input 3 - neurone 2 (layer 1)
+        -0.5   # peso collegamento input 4 - neurone 2 (layer 1)
+    ],
+
+    # pesi collegamenti verso il neurone 3
+    [
+        -0.26, # peso collegamento input 1 - neurone 3 (layer 1)
+        -0.27, # peso collegamento input 2 - neurone 3 (layer 1)
+        0.17,  # peso collegamento input 3 - neurone 3 (layer 1)
+        0.87   # peso collegamento input 4 - neurone 3 (layer 1)
+    ]
+]
+
+# errori statistici layer 1
+biases = [2,   # errore statistico neurone 1 (layer 1)
+          3,   # errore statistico neurone 2 (layer 1)
+          0.5  # errore statistico neurone 3 (layer 1)
+]
+
+# pesi del layer 2
+weights2 = [
+    [
+        0.1,    # peso collegamento neurone 1 (layer 1) - neurone 1 (layer 2)
+        -0.14,  # peso collegamento neurone 2 (layer 1) - neurone 1 (layer 2)
+        0.5,    # peso collegamento neurone 3 (layer 1) - neurone 1 (layer 2)
+    ],
+
+    # pesi collegamenti verso il neurone 2
+    [
+        -0.5,   # peso collegamento neurone 1 (layer 1) - neurone 2 (layer 2)
+        0.12,   # peso collegamento neurone 2 (layer 1) - neurone 2 (layer 2)
+        -0.33,  # peso collegamento neurone 3 (layer 1) - neurone 2 (layer 2)
+    ],
+
+    # pesi collegamenti verso il neurone 3
+    [
+        -0.44,  # peso collegamento neurone 1 (layer 1) - neurone 3 (layer 2)
+        0.73,   # peso collegamento neurone 2 (layer 1) - neurone 3 (layer 2)
+        -0.13,  # peso collegamento neurone 3 (layer 1) - neurone 3 (layer 2)
+    ]
+]
+
+# errori statistici layer 2
+biases2 = [
+    -1,   # errore statistico neurone 1 (layer 2)
+    2,    # errore statistico neurone 2 (layer 2)
+    -0.5  # errore statistico neurone 3 (layer 2)
+]
+
+# prodotto interno tra input e pesi dei neuroni del livello 1 + errori statistici livello 1:
+# output dei neuroni del layer 1
+layer1_output = np.dot(inputs, np.array(weights).T) + biases
+
+# prodotto interno tra output del layer1 e pesi dei neuroni del livello 2 + errori statistici livello 2:
+# output dei neuroni del layer 2
+layer2_output = np.dot(layer1_output, np.array(weights2).T) + biases2
+```
+
+> Il codice completo e' disponibile al percorso: [```code/04.2_due_layer.py```](code/04.2_due_layer.py)
+
+A questo punto e' possibile aggiungere altri livelli allo stesso
+modo ma diventa tedioso: e' piu' semplice utilizzare la programmazione ad oggetti
+
+### Programmazione ad oggetti
+Partiamo dagli stessi input ma cambiamo il nome
+della variabile in ```X``` per seguire lo standard piu' 
+diffuso degli script con reti neurali:
+```python
+# possiamo richiamare oggetti (funzioni,...) numpy facendo np.x(),...
+import numpy as np
+
+X = [
+    [1, 2, 3, 2.5],         # set 1 di input
+    [2.0, 5.0, -1.0, 2.0],  # set 2 di input
+    [-1.5, 2.7, 2.2, -0.8]  # set 3 di input
+]
+```
+
+Ora occorre creare un oggetto dell'hidden layer
+> hidden perche' non e' direttamente modificabile
+> dal programmatore
+
+```python
+class Layer_Dense:
+
+    def __init__(self):
+        pass
+    def forward(self):
+        pass
+```
+
+Quando inizializziamo un layer potremmo:
+* avere gia' un modello (trained model) salvato
+e dobbiamo caricarlo nel programma: in pratica
+vengono salvati su file i valori dei pesi
+e degli errori statistici
+* viene creata una nuova rete neurale:
+    * occorre inizializzare i pesi: valori casuali tra -1 e 1.
+    Vogliamo un range piccolo di valori perche' desideriamo
+    un risultato che tende a uno dei valori massimi/minimi.
+    In caso di valori grandi potremmo trovarci nella situazione in cui questi vengono
+    moltiplicati per dei pesi grandi che potrebbero essere
+    a sua volta moltiplicati per pesi grandi,...
+    Occorre normalizzare i dati in ingresso (metterli in proporzione per ridurre il range di valori)
+    e "espanderlo" (eseguire uno scale): modificare il valore per mantenergli lo stesso
+    significato ma ridurre il range di valori
+
+    * occorre inizializzare gli errori statistici: in genere sono inizializzati a 0.
+    In certi casi si desidera avere valori diversi: se ho una moltiplicazione che produce
+    uno zero, lo sommo a 0 ottengo zero, il risultato lo moltiplico ecc...
+    Propago nella rete il risultato zero: la rete e' "morta"
+
+In codice:
+utilizziamo numpy per produrre valori di peso random
+> per comodita' otteniamo sempre gli stessi risultati impostando il seed
+```python
+import numpy as np
+
+np.random.seed(0) # imposta seed per generare gli stessi valori
+```
+
+E per il layer:
+```python
+class Layer_Dense:
+
+    def __init__(self, n_inputs, n_neurons):
+        # chiediamo al programmatore il numero di input in un set del batch e di neuroni
+        # per creare una matrice di pesi di <n_inputs> righe e <n_neurons> colonne
+        # Moltiplichiamo i valori per 0.10 per ridurre il valore dei pesi
+        # > randn(): distribuzione gaussiana attorno a 0
+        # > e i suoi parametri producono la shape
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+
+        # creiamo una "matrice" di 0 con una riga e tante colonne/zeri quanti sono i neuroni
+        # > occorre passare la shape come array: (x, y)
+        self.biases = np.zeros((1, n_neurons))
+
+    def forward(self):
+        pass
+```
+
+Adesso che abbiamo il controllo dei pesi non occorre piu'
+usare il numero di neuroni per il numero di input per creare
+la matrice perche' calcoliamo il prodotto interno
+tra input e pesi invece di calcolare il prodotto interno
+tra pesi e input
+> In caso contrario sarebbe necessario scambiare righe e colonne (transpose)
+> ogni volta che utilizziamo i pesi nel metodo forward() per problemi
+> di shape
+
+Per il metodo forward:
+```python
+class Layer_Dense:
+
+    def __init__(self, n_inputs, n_neurons):
+        # chiediamo al programmatore il numero di input in un set del batch e di neuroni
+        # per creare una matrice di pesi di <n_inputs> righe e <n_neurons> colonne
+        # Moltiplichiamo i valori per 0.10 per ridurre il valore dei pesi
+        # > randn(): distribuzione gaussiana attorno a 0
+        # > e i suoi parametri producono la shape
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+
+        # creiamo una "matrice" di 0 con una riga e tante colonne/zeri quanti sono i neuroni
+        # > occorre passare la shape come array: (x, y)
+        self.biases = np.zeros((1, n_neurons))
+
+    def forward(self, inputs):
+        # <inputs> e' l'output del layer precedente
+        self.output = np.dot(inputs, self.weights) + self.biases
+```
+
+Per inizializzare gli oggetti della classe del layer:
+```python
+# 4 = numero di input, 5 = numero di neuroni e quindi di output
+layer1 = Layer_Dense(4, 5)
+
+# 5 = input dal layer precedente (5 neuroni), 2 = numero di neuroni e quindi di output
+layer2 = Layer_Dense(5, 2)
+```
+
+Ora occorre passargli i dati:
+```python
+# passo gli input al layer1
+layer1.forward(X)
+# layer1.output e' l'output del layer
+
+# pass l'output del layer 1 al layer 2
+layer2.forward(layer1.output)
+# layer2.output e' l'output del layer 2
+```
+
+> Il codice completo e' disponibile al percorso: [```code/04.3_oggetto_layer.py```](code/04.3_oggetto_layer.py)
+
+Ora la parte piu' importante che manca
+e' la funzione di attivazione (activation function)
+
+[Torna all'indice](#indice)
+
 ## Changelog
 
-**Commit 3 2020-04-28:** <br>
+**Commit 6 2020-05-03:** <br>
+* aggiunti appunti del quarto video
+* aggiunto il file ```requirements.txt``` per installare numpy
+* rinominato file workflow di github actions ```workflow.yml``` in ```spellcheck.yml```
+* aggiunto file workflow ```testscripts.yml``` per assicurare che gli script possano essere eseguiti
+e che il risultato sia quello atteso
+    > Nota: e' stato aggiunto lo script ```utils.py``` con funzioni adatte al test degli altri script
+* sistemato PEP8 degli script del terzo video
+### idee
+* creare script bash per eseguire script python nella cartella ```code``` senza aggiungerli al file di workflow
+* aggiungere immagini: sono tendenzialmente piu' esplicative del semplice testo
+* Eseguire unit test delle funzioni in ```utils.py```
+
+**Commit 3-5 2020-04-28:** <br>
 * aggiunti appunti del terzo video
 * aggiunti i link ai video anche nell'indice
 * aggiunto link al repository di github 
@@ -552,6 +921,8 @@ di errori di scrittura con hunspell
 
 **Commit 1 2020-04-19:** <br>
 Primo commit: appunti dei primi 2 video
+
+[Torna all'indice](#indice)
 
 ## Autore
 * original author: Sentdex ([Youtube channel](https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ))

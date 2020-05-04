@@ -35,38 +35,40 @@ per implementare la libreria numpy.
 __author__ = "Zenaro Stefano"
 __version__ = "01_01 2020-04-28"
 
-boold = False # messaggi di debug
+import utils  # per funzioni di test
+
+boold = False  # messaggi di debug
 
 # questi sono gli input dei 3 neuroni
 inputs = [1,  # input 1
           2,  # input 2
           3,  # input 3
           2.5  # input 4
-]
+          ]
 
 # lista di liste con i pesi
 weights = [
     [
-        0.2,  # peso collegamento input 1 - neurone 1
-        0.8,  # peso collegamento input 2 - neurone 1
-        -0.5, # peso collegamento input 3 - neurone 1
-        1.0   # peso collegamento input 4 - neurone 1
+        0.2,   # peso collegamento input 1 - neurone 1
+        0.8,   # peso collegamento input 2 - neurone 1
+        -0.5,  # peso collegamento input 3 - neurone 1
+        1.0    # peso collegamento input 4 - neurone 1
     ],
 
     # pesi collegamenti verso il neurone 2
     [
-        0.5,   # peso collegamento input 1 - neurone 2
-        -0.91, # peso collegamento input 2 - neurone 2
-        0.26,  # peso collegamento input 3 - neurone 2
-        -0.5   # peso collegamento input 4 - neurone 2
+        0.5,    # peso collegamento input 1 - neurone 2
+        -0.91,  # peso collegamento input 2 - neurone 2
+        0.26,   # peso collegamento input 3 - neurone 2
+        -0.5    # peso collegamento input 4 - neurone 2
     ],
 
     # pesi collegamenti verso il neurone 3
     [
-        -0.26, # peso collegamento input 1 - neurone 3
-        -0.27, # peso collegamento input 2 - neurone 3
-        0.17,  # peso collegamento input 3 - neurone 3
-        0.87   # peso collegamento input 4 - neurone 3
+        -0.26,  # peso collegamento input 1 - neurone 3
+        -0.27,  # peso collegamento input 2 - neurone 3
+        0.17,   # peso collegamento input 3 - neurone 3
+        0.87    # peso collegamento input 4 - neurone 3
     ]
 ]
 
@@ -74,7 +76,7 @@ weights = [
 biases = [2,   # errore statistico neurone 1
           3,   # errore statistico neurone 2
           0.5  # errore statistico neurone 3
-]
+          ]
 
 
 # output del layer (lista di output dei neuroni)
@@ -115,3 +117,15 @@ if __name__ == "__main__":
         print("Output del layer:")
         
     print(layer_outputs)
+
+    # -- SEZIONE DI TEST
+
+    # memorizza l'output desiderato dei neuroni
+    desired_output = utils.calc_layer_by_props(inputs, weights, biases)
+
+    if boold:
+        print("Output desiderato:")
+        print(desired_output)
+        
+    # errore se il risultato e' diverso da quello desiderato
+    assert layer_outputs == desired_output

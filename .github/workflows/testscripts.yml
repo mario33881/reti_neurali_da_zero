@@ -1,0 +1,43 @@
+name: Testscripts
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+    # get the repository
+    - uses: actions/checkout@v2
+    
+    # install a python version
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    # print python version
+    - name: Display Python version
+      run: python -c "import sys; print(sys.version)"
+    
+    # install requirements
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    # Execute python scripts (example: python script.py)
+    - name: Execute Python Scripts
+      run: |
+        python code/01_neurone.py
+        python code/02_livello.py
+        python code/03.1_livello_codice_dinamico.py
+        python code/03.2_neurone_numpy.py
+        python code/03.3_livello_numpy.py
+        python code/04.1_batch_input.py
+        python code/04.2_due_layer.py
+        python code/04.3_oggetto_layer.py

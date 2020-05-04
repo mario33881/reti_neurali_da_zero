@@ -46,6 +46,8 @@ Il neurone:
 __author__ = "Zenaro Stefano"
 __version__ = "01_01 2020-04-19"
 
+import utils  # per funzioni di test
+
 boold = False
 
 # questi sono gli input dei 3 neuroni
@@ -113,7 +115,24 @@ if __name__ == "__main__":
          bias3),  # tutte moltiplicazioni sommate insieme con l'errore statistico del neurone 3.
     ]
 
+    if boold:
+        print("Output:")
     print(output)
+
+    # -- SEZIONE TEST
+    # calcolo il risultato desiderato dal layer
+    desired_output = utils.calc_layer_by_neurons(inputs,  # input dei neuroni
+                                                 [{"weights": weights1, "bias": bias1},  # pesi e bias neurone 1
+                                                  {"weights": weights2, "bias": bias2},  # pesi e bias neurone 2
+                                                  {"weights": weights3, "bias": bias3},  # pesi e bias neurone 3
+                                                  ])
+
+    if boold:
+        print("Output desiderato:")
+        print(desired_output)
+
+    # errore se l'output e' diverso dal risultato desiderato
+    assert desired_output == output 
 
     if boold:
         print("Fine programma")

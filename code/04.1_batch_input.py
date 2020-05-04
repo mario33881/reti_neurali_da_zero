@@ -1,5 +1,5 @@
 """
-# Video 3: prodotto interno (dot product)
+# Video 4: Video 4: Batch, livelli e programmazione ad oggetti
 
 Appunti e traduzione della serie "Neural Networks from Scratch"
 su Youtube di sentdex:
@@ -21,42 +21,53 @@ at this website: https://nnfs.io/
 
 ---
 
-Il codice si occupa di calcolare
-gli output di un layer (come nel video 2)
-utilizzando la libreria numpy per calcolare
-il prodotto interno (dot product).
+In questo script si manda in input al layer
+un batch (gruppo) di input.
 
-Il prodotto interno calcola il prodotto
-tra i singoli elementi di due liste dello stesso indice
-> elemento 0 * elemento 0, elemento 1 * elemento 1,...
-e somma i prodotti insieme.
+Questo permette di parallelizzare i calcoli
+e di far imparare correttamente come calcolare il risultato alla rete neurale:
+pochi set alla volta rendono la rete imprecisa (si adatta solo ad un set),
+troppi set alla volta rendono la rete "troppo precisa" (la rete "sa a memoria" il risultato).
 
-Per ogni neurone:
-* Viene usato il prodotto interno per calcolare
-  la moltiplicazione tra input e pesi e sommare i risultati.
-* Al prodotto interno viene sommato l'errore statistico (bias)
+Nel momento in cui ho una matrice di input devo
+assicurarmi che la shape sia adatta a poter
+fare il prodotto interno con la matrice dei pesi.
 
-In uscita al layer otteniamo un array di 3 output (uno per neurone)
+Se ho 3 set di 4 dati in input, shape (3,4),
+devo poter moltiplicare i 4 dati per i 4 pesi, i quali hanno shape (3,4):
+devo invertire le righe e le colonne dei pesi per omogeneizzare
+i pesi con i dati:
+* dati con shape (3,4)
+* pesi con shape (4,3)
 
-Documentazione di numpy.dot():
-https://numpy.org/doc/stable/reference/generated/numpy.dot.html?highlight=dot#numpy.dot
+In questo modo posso fare il prodotto interno tra i 4 dati
+e i 4 pesi.
+
+Per fare lo scambio righe/colonne dei pesi occorre
+convertire la lista dei pesi in un array numpy
+e usare il metodo T (transpose).
+> Documentazione di transpose:
+> https://numpy.org/doc/stable/reference/generated/numpy.ndarray.T.html?highlight=t#numpy.ndarray.T
 """
 
 __author__ = "Zenaro Stefano"
-__version__ = "01_01 2020-04-28"
+__version__ = "01_01 2020-05-03"
 
 import utils  # per funzioni di test
 
 # possiamo richiamare oggetti (funzioni,...) numpy facendo np.x(),...
 import numpy as np
 
-boold = False  # variabile di debug
+boold = False  # variabile debug
 
-# input
-inputs = [1, 2, 3, 2.5]
+inputs = [
+    [1, 2, 3, 2.5],         # set/sample 1 di input
+    [2.0, 5.0, -1.0, 2.0],  # set/sample 2 di input
+    [-1.5, 2.7, 2.2, -0.8]  # set/sample 3 di input
+]
 
-# matrice dei pesi dei collegamenti
 weights = [
+    # pesi collegamento verso il neurone 1
     [
         0.2,   # peso collegamento input 1 - neurone 1
         0.8,   # peso collegamento input 2 - neurone 1
@@ -88,24 +99,25 @@ biases = [2,   # errore statistico neurone 1
           ]
 
 if __name__ == "__main__":
-        
-    # prodotto interno
-    output = np.dot(weights, inputs) + biases
+    
+    # converto la lista di pesi in un array numpy
+    numpy_weigths = np.array(weights)
+
+    # scambio righe e colonne (eseguo "transpose")
+    # per evitare l'errore di shape
+    transposed_weigths = numpy_weigths.T
+    
+    # prodotto interno tra matrici input e pesi (righe e colonne scambiate)
+    output = np.dot(inputs, transposed_weigths) + biases
 
     if boold:
         print("Output:")
     print(output)
 
     # -- SEZIONE DI TEST
+
+    # calcola gli output desiderati dal layer
+    desired_outputs = utils.calc_batches_layer_by_props(inputs, weights, biases)
     
-    # memorizza l'output desiderato dei neuroni
-    desired_output = utils.calc_layer_by_props(inputs, weights, biases)
-    
-    if boold:
-        print("Output desiderato:")
-        print(desired_output)
-        
     # errore se il risultato e' diverso da quello desiderato
-    # > nota: e' necessario usare np.allclose() perche' internamente
-    # > varia la precisione dei numeri e quindi i risultati sarebbero leggermente diversi
-    assert np.allclose(output, desired_output)
+    assert np.allclose(output, desired_outputs)

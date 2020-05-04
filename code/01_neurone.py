@@ -37,6 +37,8 @@ Il neurone:
 __author__ = "Zenaro Stefano"
 __version__ = "01_01 2020-04-19"
 
+import utils  # usato per testare che lo script dia il risultato desiderato
+
 boold = False
 
 inputs = [1.2,  # output neurone 1
@@ -61,7 +63,22 @@ if __name__ == "__main__":
               inputs[2] * weights[2] +  # dato neurone 3 moltiplicato per peso collegamento
               bias)                     # tutte moltiplicazioni sommate insieme con l'errore statistico.
 
+    if boold:
+        print("Output:")
+    
     print(output)
+
+    # -- SEZIONE DI TEST
+
+    # calcola l'output desiderato
+    desired_output = utils.calc_neuron(inputs, weights, bias)
+
+    if boold:
+        print("desired output:")
+        print(desired_output)
+
+    # errore se l'output desiderato e l'output sono diversi
+    assert output == desired_output
 
     if boold:
         print("Fine programma")

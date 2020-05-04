@@ -40,10 +40,15 @@ Documentazione di numpy.dot():
 https://numpy.org/doc/stable/reference/generated/numpy.dot.html?highlight=dot#numpy.dot
 """
 
+__author__ = "Zenaro Stefano"
+__version__ = "01_01 2020-04-28"
+
+import utils  # per funzioni di test
+
 # possiamo richiamare oggetti (funzioni,...) numpy facendo np.x(),...
 import numpy as np
 
-boold = False # messaggi debug
+boold = False  # messaggi debug
 
 inputs = [1, 2, 3, 2.5]          # input
 weights = [0.2, 0.8, -0.5, 1.0]  # pesi dei collegamenti
@@ -58,5 +63,17 @@ if __name__ == "__main__":
         print("* Inputs: ", inputs)
         print("* Pesi: ", weights)
         print("* Errore statistico: ", bias)
+        print("Output:")
 
     print(output)
+
+    # -- SEZIONE TEST
+    # calcola il risultato desiderato
+    desired_output = utils.calc_neuron(inputs, weights, bias)
+
+    if boold:
+        print("Output desiderato:")
+        print(desired_output)
+
+    # errore se il risultato e' diverso da quello desiderato
+    assert output == desired_output
