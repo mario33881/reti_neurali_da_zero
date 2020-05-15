@@ -87,18 +87,18 @@ if __name__ == "__main__":
     # scorri unione (fatta con zip() ) delle liste dei pesi e dei bias
     #
     # Documentazione di zip(): https://docs.python.org/3/library/functions.html#zip
-    # 
-    # > l'unione e' fatta per elemento 
+    #
+    # > l'unione e' fatta per elemento
     # > (es. elemento 0 di weights e elemento 0 di biases sono il primo array,
     # >      elemento 1 di weights e elemento 1 di biases sono il secondo array, ...)
     for neuron_weights, neuron_bias in zip(weights, biases):
         # output nel neurone
         neuron_output = 0
-        
+
         # scorri unione degli input e dei pesi
         for n_input, weight in zip(inputs, neuron_weights):
             neuron_output += n_input * weight  # moltiplica (input * peso) per input e sommali
-        
+
         # somma l'errore statistico
         neuron_output += neuron_bias
 
@@ -112,10 +112,10 @@ if __name__ == "__main__":
             print("* Errore statistico: ", neuron_bias)
             print("Output del neurone: ", neuron_output)
             print("-" * 50)
-    
+
     if boold:
         print("Output del layer:")
-        
+
     print(layer_outputs)
 
     # -- SEZIONE DI TEST
@@ -126,6 +126,6 @@ if __name__ == "__main__":
     if boold:
         print("Output desiderato:")
         print(desired_output)
-        
+
     # errore se il risultato e' diverso da quello desiderato
     assert layer_outputs == desired_output

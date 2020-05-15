@@ -132,7 +132,7 @@ if __name__ == "__main__":
         print(desired_output)
 
     # errore se l'output e' diverso dal risultato desiderato
-    assert desired_output == output 
+    assert desired_output == output
 
     if boold:
         print("Fine programma")

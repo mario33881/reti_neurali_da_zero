@@ -12,7 +12,7 @@ def calc_neuron(t_inputs, t_weights, t_bias):
     in the <t_inputs> list and multiplies it by its weight (in <t_weights>).
 
     When the loop stops, the bias is summed to the output.
-    
+
     The output finally is returned by the function.
 
     Example:
@@ -24,7 +24,7 @@ def calc_neuron(t_inputs, t_weights, t_bias):
     :param int t_bias: integer, bias of the neuron
     :return t_output: integer, output of the neuron
     :raises ValueError: <t_inputs> and <t_weights> must have the same len
-    :rtype: int 
+    :rtype: int
     """
 
     # neuron output
@@ -33,7 +33,7 @@ def calc_neuron(t_inputs, t_weights, t_bias):
     # number of inputs must match the number of weights
     if len(t_inputs) != len(t_weights):
         raise ValueError("<t_inputs> and <t_weights> must have the same len")
-    
+
     # loop for each input and multiply it by its weight
     for i in range(len(t_inputs)):
         t_output += t_inputs[i] * t_weights[i]
@@ -67,7 +67,7 @@ def calc_layer_by_neurons(t_inputs, t_neurons):
 
     # contains neurons outputs
     t_output = []
-    
+
     # loop for each neuron in the layer
     for neuron in t_neurons:
 
@@ -77,7 +77,7 @@ def calc_layer_by_neurons(t_inputs, t_neurons):
 
         if "bias" not in neuron:
             raise ValueError("neuron '{}' must have <bias>".format(neuron))
-        
+
         # save the data in variables
         neuron_weights = neuron["weights"]
         neuron_bias = neuron["bias"]
@@ -108,11 +108,11 @@ def calc_layer_by_props(t_inputs, t_m_weights, t_biases):
     """
 
     if len(t_m_weights) != len(t_biases):
-        # t_m_weights is a matrix with Y lists (where Y is the number of neurons) 
+        # t_m_weights is a matrix with Y lists (where Y is the number of neurons)
         # of X elements (X is the number of connections to one neuron).
         # Y must match the number of biases because both are equal to the number of neurons
         raise ValueError("len of <t_m_weights> and <t_biases> must match")
-    
+
     # memorize properties of neurons
     neurons_props = []
 
@@ -126,7 +126,7 @@ def calc_layer_by_props(t_inputs, t_m_weights, t_biases):
         # save the properties of the single neuron in a dictionary and add it to the neurons properties
         neuron_props = {"weights": neuron_weights, "bias": neuron_bias}
         neurons_props.append(neuron_props)
-    
+
     # calculate the output of the layer by passing data and neurons properties to
     # the calc_layer_by_neurons() function
     t_output = calc_layer_by_neurons(t_inputs, neurons_props)
@@ -157,7 +157,7 @@ def calc_batches_layer_by_props(t_m_inputs, t_m_weights, t_biases):
         # calculate the layer output and add it to the layer outputs matrix
         layer_output = calc_layer_by_props(inputs, t_m_weights, t_biases)
         layer_outputs.append(layer_output)
-    
+
     return layer_outputs
 
 
@@ -179,7 +179,7 @@ def neuron_relu_function(t_input):
     # if the input value is less than zero, set the output to zero
     if t_input < 0:
         output = 0
-    
+
     return output
 
 
@@ -207,7 +207,7 @@ def layer_relu_function(t_inputs):
 
         # add each relu output to the output list
         output.append(relu_output)
-    
+
     return output
 
 
@@ -233,5 +233,5 @@ def batch_layer_relu_function(t_m_inputs):
 
         # add the output to the relu outputs
         output.append(sample_relu_output)
-    
+
     return output

@@ -4,6 +4,7 @@
 
 ![Testscripts](https://github.com/mario33881/reti_neurali_da_zero/workflows/Testscripts/badge.svg) Test automatici script python
 
+![PEP8](https://github.com/mario33881/reti_neurali_da_zero/workflows/PEP8/badge.svg) Check PEP8
 
 Appunti e traduzione della serie "Neural Networks from Scratch"
 su Youtube di sentdex: [clicca qui per accedere al suo canale Youtube](https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ)
@@ -1104,7 +1105,7 @@ activation1.forward(layer1.output)
 
 ## Changelog
 
-**Commit 8 2020-05-15:** <br>
+**Commit 8-9 2020-05-15:** <br>
 * Aggiunti alcuni unit test per ```utils.py``` (script ```utils_unittest.py```)
 * Aggiunto check automatico PEP8 e dello spelling negli script python (aggiunto workflow ```pep8.yml```)
 ### idee/todo

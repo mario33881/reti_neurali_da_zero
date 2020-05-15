@@ -88,7 +88,7 @@ biases = [2,   # errore statistico neurone 1
           ]
 
 if __name__ == "__main__":
-        
+
     # prodotto interno
     output = np.dot(weights, inputs) + biases
 
@@ -97,14 +97,14 @@ if __name__ == "__main__":
     print(output)
 
     # -- SEZIONE DI TEST
-    
+
     # memorizza l'output desiderato dei neuroni
     desired_output = utils.calc_layer_by_props(inputs, weights, biases)
-    
+
     if boold:
         print("Output desiderato:")
         print(desired_output)
-        
+
     # errore se il risultato e' diverso da quello desiderato
     # > nota: e' necessario usare np.allclose() perche' internamente
     # > varia la precisione dei numeri e quindi i risultati sarebbero leggermente diversi

@@ -42,7 +42,7 @@ output_max = []  # output con max()
 
 if __name__ == "__main__":
 
-    # calcolo output con condizioni        
+    # calcolo output con condizioni
     for i in inputs:
         if i > 0:
             output.append(i)
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         print("output max():")
         print(output_max)
         print("output condizioni:")
-        
+
     print(output)
 
     # -- SEZIONE TEST

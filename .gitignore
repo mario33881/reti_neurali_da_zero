@@ -1,2 +1,8 @@
+# ignore cache (made when utils.py is imported in other scripts)
 code/__pycache__
+
+# ignore tests folder PyCharm
+code/_trial_temp
+
+# ignore temp file spellcheck.sh
 ./spellcheck.temp

@@ -58,14 +58,14 @@ if __name__ == "__main__":
     if boold:
         print("Inizio programma")
 
-    output = (inputs[0] * weights[0] +  # dato neurone 1 moltiplicato per peso collegamento 
+    output = (inputs[0] * weights[0] +  # dato neurone 1 moltiplicato per peso collegamento
               inputs[1] * weights[1] +  # dato neurone 2 moltiplicato per peso collegamento
               inputs[2] * weights[2] +  # dato neurone 3 moltiplicato per peso collegamento
               bias)                     # tutte moltiplicazioni sommate insieme con l'errore statistico.
 
     if boold:
         print("Output:")
-    
+
     print(output)
 
     # -- SEZIONE DI TEST

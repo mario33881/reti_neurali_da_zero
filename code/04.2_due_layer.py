@@ -123,7 +123,7 @@ if __name__ == "__main__":
         print("Output livello 1:")
         print(layer1_output)
         print("Output livello 2:")
-    
+
     print(layer2_output)
 
     # -- SEZIONE DI TEST
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     # CALCOLA OUTPUT DEL LAYER 1
     # output dei neuroni del livello, per ogni sample/set
     desired_outputs_layer1 = utils.calc_batches_layer_by_props(inputs, weights, biases)
-    
+
     # errore se il risultato e' diverso da quello desiderato
     assert np.allclose(layer1_output, desired_outputs_layer1)
 

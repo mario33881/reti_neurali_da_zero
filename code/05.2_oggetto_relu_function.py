@@ -25,7 +25,7 @@ Questo script utilizza l'oggetto LayerDense()
 per creare un layer e calcolare il risultato.
 
 Il risultato del layer viene passato attraverso
-l'oggetto ActivationReLU() per calcolare il risultato 
+l'oggetto ActivationReLU() per calcolare il risultato
 della funzione matematica "rectified linear function" (rettificatore)
 
 Ora viene usata la libreria nnfs per garantire

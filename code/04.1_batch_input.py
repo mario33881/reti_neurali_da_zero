@@ -99,14 +99,14 @@ biases = [2,   # errore statistico neurone 1
           ]
 
 if __name__ == "__main__":
-    
+
     # converto la lista di pesi in un array numpy
     numpy_weights = np.array(weights)
 
     # scambio righe e colonne (eseguo "transpose")
     # per evitare l'errore di shape
     transposed_weights = numpy_weights.T
-    
+
     # prodotto interno tra matrici input e pesi (righe e colonne scambiate)
     output = np.dot(inputs, transposed_weights) + biases
 
@@ -118,6 +118,6 @@ if __name__ == "__main__":
 
     # calcola gli output desiderati dal layer
     desired_outputs = utils.calc_batches_layer_by_props(inputs, weights, biases)
-    
+
     # errore se il risultato e' diverso da quello desiderato
     assert np.allclose(output, desired_outputs)

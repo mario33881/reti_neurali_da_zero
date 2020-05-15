@@ -29,19 +29,19 @@ class TestUtils(unittest.TestCase):
             # ==============================================================
             # -- INPUTS SET TO ZERO
             # test case with 0 inputs, random weights, 0 bias
-            result = utils.calc_neuron([0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 
-                                    [rnd_value1, rnd_value2, rnd_value3,
-                                    rnd_value4, rnd_value5, rnd_value6],
-                                    0.0)
-            
+            result = utils.calc_neuron([0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                                       [rnd_value1, rnd_value2, rnd_value3,
+                                        rnd_value4, rnd_value5, rnd_value6],
+                                       0.0)
+
             self.assertEqual(result, 0.0)
 
             # test case with 0 inputs, random weights, random bias
-            result = utils.calc_neuron([0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 
-                                    [rnd_value1, rnd_value2, rnd_value3,
-                                    rnd_value4, rnd_value5, rnd_value6],
-                                    rnd_bias)
-            
+            result = utils.calc_neuron([0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                                       [rnd_value1, rnd_value2, rnd_value3,
+                                        rnd_value4, rnd_value5, rnd_value6],
+                                       rnd_bias)
+
             self.assertEqual(result, rnd_bias)
 
             # ==============================================================
@@ -49,21 +49,20 @@ class TestUtils(unittest.TestCase):
 
             # test case with random inputs, 0 weights, 0 bias
             result = utils.calc_neuron([rnd_value1, rnd_value2, rnd_value3,
-                                    rnd_value4, rnd_value5, rnd_value6],
-                                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                                    0.0)
-            
+                                        rnd_value4, rnd_value5, rnd_value6],
+                                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                                       0.0)
+
             self.assertEqual(result, 0.0)
 
             # test case with random inputs, 0 weights, random bias
             result = utils.calc_neuron([rnd_value1, rnd_value2, rnd_value3,
-                                    rnd_value4, rnd_value5, rnd_value6],
-                                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                                    rnd_bias)
-            
+                                        rnd_value4, rnd_value5, rnd_value6],
+                                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                                       rnd_bias)
+
             self.assertEqual(result, rnd_bias)
 
-            
             # ==============================================================
             # -- EXPECTED ERRORS
 
@@ -72,19 +71,19 @@ class TestUtils(unittest.TestCase):
                 utils.calc_neuron([rnd_value1],
                                   [rnd_value2, rnd_value3],
                                   rnd_bias)
-            
+
             # test case with more inputs than weights
             with self.assertRaises(ValueError):
                 utils.calc_neuron([rnd_value4, rnd_value2, rnd_value3],
                                   [rnd_value5, rnd_value4],
                                   rnd_bias)
-            
+
             # ==============================================================
             # -- EXPECTED RESULTS
 
             result = utils.calc_neuron([1, 2, 3], [0.2, 0.5, 1.7], 3)
             self.assertEqual(result, 9.3)
-    
+
     def test_calc_layer_by_neurons(self):
         """
         Tests calc_layer_by_neurons(t_inputs, t_neurons) function.
@@ -127,7 +126,7 @@ class TestUtils(unittest.TestCase):
                 ])
 
             self.assertEqual(result, [rnd_bias, rnd_bias, rnd_bias, rnd_bias, rnd_bias])
-    
+
     def test_calc_layer_by_props(self):
         """
         Tests calc_layer_by_props() function.
@@ -153,7 +152,7 @@ class TestUtils(unittest.TestCase):
         for n in range(-100000, 100000):
             # calculate ReLU of n
             result = utils.neuron_relu_function(n)
-            
+
             # result should be zero if n is less than 0.
             # Otherwise result is equal to n
             if n < 0:
