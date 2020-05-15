@@ -1,5 +1,5 @@
 """
-# Video 4: Video 4: Batch, livelli e programmazione ad oggetti
+# Video 4: Batch, livelli e programmazione ad oggetti
 
 Appunti e traduzione della serie "Neural Networks from Scratch"
 su Youtube di sentdex:

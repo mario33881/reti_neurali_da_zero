@@ -30,14 +30,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    # Execute python scripts (example: python script.py)
+    # Execute python scripts
     - name: Execute Python Scripts
       run: |
-        python code/01_neurone.py
-        python code/02_livello.py
-        python code/03.1_livello_codice_dinamico.py
-        python code/03.2_neurone_numpy.py
-        python code/03.3_livello_numpy.py
-        python code/04.1_batch_input.py
-        python code/04.2_due_layer.py
-        python code/04.3_oggetto_layer.py
+        chmod +x testscripts.sh
+        ./testscripts.sh

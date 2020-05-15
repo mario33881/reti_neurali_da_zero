@@ -1,5 +1,5 @@
 """
-# Video 4: Batch, livelli e programmazione ad oggetti
+# Video 5: Activation function
 
 Appunti e traduzione della serie "Neural Networks from Scratch"
 su Youtube di sentdex:
@@ -21,31 +21,42 @@ at this website: https://nnfs.io/
 
 ---
 
-Questo script ottiene lo stesso risultato
-dello script "04.2_due_layer.py" attraverso
-la programmazione ad oggetti.
+Questo script utilizza l'oggetto LayerDense()
+per creare un layer e calcolare il risultato.
 
-Inoltre i valori di inizializzazione
-degli errori statistici e dei pesi
-sono realistici e non piu' valori inventati.
+Il risultato del layer viene passato attraverso
+l'oggetto ActivationReLU() per calcolare il risultato 
+della funzione matematica "rectified linear function" (rettificatore)
+
+Ora viene usata la libreria nnfs per garantire
+che i risultati di numpy siano sempre uguali, per motivi didattici,
+e per permettere di generare dei dataset.
 """
 
 __author__ = "Zenaro Stefano"
-__version__ = "01_01 2020-05-03"
+__version__ = "01_01 2020-05-14"
 
 import utils  # per funzioni di test
 
 # possiamo richiamare oggetti (funzioni,...) numpy facendo np.x(),...
 import numpy as np
 
+# importa nnfs per usare nnfs.init() e garantire cosi' i risultati
+import nnfs
+# importa la funzione che permette di generare i dataset di tipo spirale
+from nnfs.datasets import spiral_data
+
 boold = False  # per debug
 
-# input del primo layer
-X = [
-    [1, 2, 3, 2.5],         # set 1 di input
-    [2.0, 5.0, -1.0, 2.0],  # set 2 di input
-    [-1.5, 2.7, 2.2, -0.8]  # set 3 di input
-]
+
+class ActivationReLU:
+
+    def __init__(self):
+        # definisco output nel metodo __init__ per PEP8
+        self.output = None
+
+    def forward(self, inputs):
+        self.output = np.maximum(0, inputs)
 
 
 class LayerDense:
@@ -72,31 +83,35 @@ class LayerDense:
 
 if __name__ == "__main__":
 
-    # imposta seed per generare gli stessi valori con il random
-    np.random.seed(0)
+    # inizializza nnfs per garantire gli stessi risultati di numpy
+    # > usato per motivi didattici
+    nnfs.init()
+
+    # genero il dataset: sono 100 sample, 3 classi, ogni sample ha 2 feature (x e y di un punto)
+    # X e' sono i feature set; y sono i label, target o classifications (classi)
+    X, y = spiral_data(100, 3)
 
     # creo il layer 1
-    # 4 = numero di input, 5 = numero di neuroni e quindi di output
-    layer1 = LayerDense(4, 5)
-
-    # creo il layer 2
-    # 5 = input dal layer precedente (5 neuroni), 2 = numero di neuroni e quindi di output
-    layer2 = LayerDense(5, 2)
+    # 2 = numero di input (i punti hanno coordinate x e y), 5 = numero di neuroni e quindi di output
+    layer1 = LayerDense(2, 5)
 
     # passo gli input al layer1
     layer1.forward(X)
     layer1_output = layer1.output  # output del layer 1
 
-    # pass l'output del layer 1 al layer 2
-    layer2.forward(layer1_output)
-    layer2_output = layer2.output  # output del layer 2
+    # creo oggetto della activation function
+    activation1 = ActivationReLU()
+
+    # passo l'output del layer all'activation function:
+    # il suo output (activation1.output) contiene solo valori 0 o maggiori di 0
+    activation1.forward(layer1_output)
+    activation1_output = activation1.output  # output activation function
 
     if boold:
-        print("Output:")
-    print(layer2_output)
+        print("output:")
+    print(activation1_output)
 
     # -- SEZIONE DI TEST
-    np.random.seed(0)
 
     # CALCOLA OUTPUT DEL LAYER 1
     # output dei neuroni del livello, per ogni sample/set
@@ -105,15 +120,12 @@ if __name__ == "__main__":
     # errore se il risultato e' diverso da quello desiderato
     assert np.allclose(layer1_output, desired_outputs_layer1)
 
-    # CALCOLA OUTPUT DEL LAYER 2
-    # output dei neuroni del livello, per ogni sample/set
-    desired_outputs_layer2 = utils.calc_batches_layer_by_props(desired_outputs_layer1,
-                                                               np.array(layer2.weights).T,
-                                                               layer2.biases[0])
+    # CALCOLA OUTPUT DEL LAYER DOPO ESSERE PASSATO PER LA FUNZIONE RETTIFICATORE
+    desired_relu_outputs_layer1 = utils.batch_layer_relu_function(desired_outputs_layer1)
 
     if boold:
-        print("Desired output:")
-        print(desired_outputs_layer2)
+        print("desired output:")
+        print(desired_relu_outputs_layer1)
 
     # errore se il risultato e' diverso da quello desiderato
-    assert np.allclose(layer2_output, desired_outputs_layer2)
+    assert np.allclose(activation1_output, desired_relu_outputs_layer1)

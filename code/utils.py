@@ -147,6 +147,7 @@ def calc_batches_layer_by_props(t_m_inputs, t_m_weights, t_biases):
     :param list t_m_weights: list of lists, each row is a set of connection weights to a neuron
     :param list t_biases: list of biases
     :return layer_outputs: list of lists, contains the outputs of the layer of each sample data.
+    :rtype: list
     """
     # memorize layer outputs
     layer_outputs = []
@@ -158,3 +159,79 @@ def calc_batches_layer_by_props(t_m_inputs, t_m_weights, t_biases):
         layer_outputs.append(layer_output)
     
     return layer_outputs
+
+
+def neuron_relu_function(t_input):
+    """
+    Rectified linear activation function for one neuron.
+
+    If the input (output of the neuron calculations) is less than 0, returns 0.
+    Else returns t_input
+
+    :param int t_input: input value
+    :return output: output value (0 or t_input)
+    :rtype: int
+    """
+
+    # default: output is equal to t_input
+    output = t_input
+
+    # if the input value is less than zero, set the output to zero
+    if t_input < 0:
+        output = 0
+    
+    return output
+
+
+def layer_relu_function(t_inputs):
+    """
+    Rectified linear activation function for a layer.
+
+    Returns a list of integers:
+    a loop checks if each input is less than 0 or not
+    thanks to the neuron_relu_function()
+    and appends the returned value to the output list
+
+    :param list t_inputs: list of inputs (neurons' outputs)
+    :return output: list of ReLU outputs
+    :rtype: list
+    """
+
+    # contains the outputs of the relu function
+    output = []
+
+    # loop for each neuron output of the layer
+    for relu_input in t_inputs:
+        # pass to the rectified linear function each output
+        relu_output = neuron_relu_function(relu_input)
+
+        # add each relu output to the output list
+        output.append(relu_output)
+    
+    return output
+
+
+def batch_layer_relu_function(t_m_inputs):
+    """
+    Rectified linear activation function for a layer, data passed in samples.
+
+    A loop retrieves the output of a layer for each sample data
+    and uses the ReLU function to set all the negative values to zero.
+
+    :param list t_m_inputs: list of lists, outputs (many samples) of a layer
+    :return output: list of lists, outputs of the ReLU function (all the samples, one layer)
+    :rtype: list
+    """
+
+    # contains the relu output of all the samples
+    output = []
+
+    # for each sample output of the layer (result of every neuron in the layer, for all the samples)
+    for sample_output in t_m_inputs:
+        # calculate the ReLU output of the single sample output
+        sample_relu_output = layer_relu_function(sample_output)
+
+        # add the output to the relu outputs
+        output.append(sample_relu_output)
+    
+    return output

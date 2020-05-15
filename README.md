@@ -1,6 +1,9 @@
 # Reti neurali da zero
 
-![Spellcheck](https://github.com/mario33881/reti_neurali_da_zero/workflows/Spellcheck/badge.svg)
+![Spellcheck](https://github.com/mario33881/reti_neurali_da_zero/workflows/Spellcheck/badge.svg) Correttezza spelling nel readme
+
+![Testscripts](https://github.com/mario33881/reti_neurali_da_zero/workflows/Testscripts/badge.svg) Test automatici script python
+
 
 Appunti e traduzione della serie "Neural Networks from Scratch"
 su Youtube di sentdex: [clicca qui per accedere al suo canale Youtube](https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ)
@@ -56,6 +59,10 @@ Requisiti:
     * [Codice input in batch(gruppi)](code/04.1_batch_input.py)
     * [Codice 2 layer](code/04.2_due_layer.py)
     * [Codice 2 layer in programmazione ad oggetti](code/04.3_oggetto_layer.py)
+* [Video 5: Activation function](#video-5-activation-function)
+    * [Video](https://www.youtube.com/watch?v=gmjzbpSVY1A)
+    * [Codice Relu function](code/05.1_relu_function.py)
+    * [Codice Relu function in programmazione ad oggetti](code/05.2_oggetto_relu_function.py)
 * [Changelog](#changelog)
 
 > Nota 1: clicca sui titoli esterni per andare nelle sezioni
@@ -890,7 +897,227 @@ e' la funzione di attivazione (activation function)
 
 [Torna all'indice](#indice)
 
+---
+
+## Video 5: Activation function
+> Link: https://www.youtube.com/watch?v=gmjzbpSVY1A
+
+Esistono diverse activation function
+
+### Step function
+In una step function l'output e' zero se un valore in input x
+e' negativo, altrimenti e' uno
+
+Utilizzandola come activation function ogni neurone quindi:
+* riceve degli input moltiplicati per il peso dei collegamenti
+* somma i prodotti con il bias
+* il risultato viene passato alla step function che restituira'
+uno zero o un uno
+
+> In genere l'output layer ha una activation function diversa
+> da quella degli hidden layer
+
+### Sigmoid function
+Ci si e' resi conto che e' piu' affidabile fare training ad una rete neurale 
+utilizzando una sigmoid function invece di una step function perche' 
+il risultato e' piu' granulare (dettagliato)
+
+Utilizzandola come activation function ogni neurone quindi:
+* riceve degli input moltiplicati per il peso dei collegamenti
+* somma i prodotti con il bias
+* il risultato viene passato alla sigmoid function che restituira'
+un risultato tra zero e uno
+
+E' importante avere un risultato piu' dettagliato per calcolare
+quanto la rete sbaglia (loss) per poter utilizzare un ottimizzatore
+e migliorare la rete.
+
+Se utilizziamo una step function il risultato e' o zero o uno
+e l'ottimizzatore non riesce a comprendere quanto il risultato
+si distacca tra uno 0 e un 1
+
+### Rectified linear function
+Se l'input x e' maggiore di zero, l'output e' x,
+altrimenti l'output e' zero.
+
+Utilizzandola come activation function ogni neurone quindi:
+* riceve degli input moltiplicati per il peso dei collegamenti
+* somma i prodotti con il bias
+* il risultato viene passato alla rectified linear function che restituira'
+un risultato tra zero e uno
+
+Il risultato e' comunque granulare, l'output e' sempre positivo, maggiore o uguale a zero.
+E' migliore rispetto alla sigmoid function perche'
+la sigmoid function ha un problema che verra' spiegato piu' avanti.
+
+Viene utilizzata anche perche' e' una funzione piu' semplice di una sigmoid function,
+e' molto veloce e funziona bene.
+
+
+Perche' serve una activation function? 
+Nella teoria serve per mimare l'attivazione di un neurone naturale
+ma matematicamente a cosa serve?
+
+Se non utilizziamo le activation function il risultato di un neurone
+e' lineare.
+A livello di rete neurale anche il suo output sarebbe lineare,
+e questo va bene per tutte le situazioni in cui l'input e' lineare.
+
+Se l'input non e' lineare questo deve essere approssimato e il
+risultato non e' soddisfacente.
+
+Perche' le altre funzioni riescono a dare un buon risultato?
+Perche' non sono lineari. La funzione rectified linear
+e' molto simile ad una funzione lineare ma si differenzia
+abbastanza per essere potente.
+
+
+Matematicamente un neurone permette:
+* di amplificare l'output attraverso il peso del collegamento
+* di fare un offset orizzontale dell'output attraverso l'errore statistico
+
+Se il peso e' positivo la funzione si attiva, se e' negativo
+la funzione si disattiva.
+
+Aggiungendo un secondo neurone con peso 1 e bias 0 il risultato resta invariato.
+
+Aumentando il bias del secondo neurone avviene un offset verticale dell'output.
+
+Modificando pesi e bias di tutti i neuroni e' possibile ricreare
+la funzione dell'output desiderato
+
+### Creare una rectified linear function
+
+Definiamo un vettore di input:
+```python
+inputs = [0, 2, -1, 3.3, -2.7, 1.1, 2.2, -100]
+```
+E uno di output:
+```python
+output = []
+```
+
+Utilizziamo un for loop per controllare
+se ogni input e' maggiore di zero 
+(e allora lo aggiungiamo al vettore output)
+o se e' minore o uguale a zero (e allora aggiungiamo zero al vettore output)
+```python
+for i in inputs:
+    if i > 0:
+        output.append(i)
+    elif i <= 0:
+        output.append(0)
+```
+
+Un altro metodo di scrivere il codice qui sopra e' trovare il valore
+massimo tra zero e i singoli input:
+```python
+for i in inputs:
+    # se 0 e' il valore piu' grande, aggiungi 0
+    # altrimenti aggiungi l'input <i>
+    output.append(max(0, i))
+```
+
+> Il codice completo e' disponibile al percorso: [```code/05.1_relu_function.py```](code/05.1_relu_function.py)
+
+In programmazione ad oggetti
+```python
+class Activation_ReLU:
+    def forward(self, inputs):
+        self.output = np.maximum(0, inputs)
+```
+
+Installare la libreria nnfs per avere a disposizione
+la funzione ```create_data()``` che serve per generare dei dati
+da passare alla rete neurale.
+> Piu' avanti nella serie si utilizzeranno dati reali
+
+La funzione richiede due parametri:
+
+    create_data(points, classes)
+
+Crea un dataset:
+points e' il numero di punti generati (ognuno con coordinate x e y, due feature o input per neurone) o feature set,
+mentre classes e' il numero di classi (una classe e' una spirale).
+La funzione genera dei punti posizionati seguendo un movimento a spirale.
+
+La funzione e' utilizzabile attraverso la funzione ```spiral_data()``` in questo modo:
+```python
+from nnfs.datasets import spiral_data
+
+nnfs.init()
+
+# X e' sono i feature set; y sono i label, target o classifications (classi)
+X, y = spiral_data(100, 3)
+```
+
+Riprendendo il codice:
+```python
+from nnfs.datasets import spiral_data
+
+nnfs.init()
+
+# X e' sono i feature set; y sono i label, target o classifications (classi)
+X, y = spiral_data(100, 3)
+
+class Activation_ReLU:
+    def forward(self, inputs):
+        # calcola il massimo tra i valori e 0 (tutti i valori negativi "diventano" zeri)
+        self.output = np.maximum(0, inputs)
+
+class Layer_Dense:
+
+    def __init__(self, n_inputs, n_neurons):
+        # chiediamo al programmatore il numero di input in un set del batch e di neuroni
+        # per creare una matrice di pesi di <n_inputs> righe e <n_neurons> colonne
+        # Moltiplichiamo i valori per 0.10 per ridurre il valore dei pesi
+        # > randn(): distribuzione gaussiana attorno a 0
+        # > e i suoi parametri producono la shape
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+
+        # creiamo una "matrice" di 0 con una riga e tante colonne/zeri quanti sono i neuroni
+        # > occorre passare la shape come array: (x, y)
+        self.biases = np.zeros((1, n_neurons))
+
+    def forward(self, inputs):
+        # <inputs> e' l'output del layer precedente
+        self.output = np.dot(inputs, self.weights) + self.biases
+
+
+# 2 = numero di input, 5 = numero di neuroni e quindi di output
+layer1 = Layer_Dense(4, 5)
+
+# creo oggetto della activation function
+activation1 = Activation_ReLU()
+
+# passo gli input al layer1
+layer1.forward(X)
+
+# passo l'output del layer all'activation function:
+# il suo output (activation1.output) contiene solo valori 0 o maggiori di 0
+activation1.forward(layer1.output)
+```
+
+> Il codice completo e' disponibile al percorso: [```code/05.2_oggetto_relu_function.py```](code/05.2_oggetto_relu_function.py)
+
+[Torna all'indice](#indice)
+
 ## Changelog
+
+**Commit 7 2020-05-15:** <br>
+* aggiunti appunti quinto video
+* aggiunto script bash ```testscripts.sh```per eseguire tutti gli script
+python nella cartella ```code```
+* modificato il file workflow ```testscripts.yml``` per eseguire
+lo script bash riportato al punto sopra
+* modificato lo script ```spellcheck.sh``` per rimuovere parole duplicate dalla wordlist e dal dizionario custom
+* aggiunta libreria nnfs al file ```requirements.txt```: possiede funzioni utili
+a generare dataset e rende prevedibile l'output di numpy per mantenere possibile
+il troubleshooting per motivi didattici
+### idee
+* aggiungere immagini: sono tendenzialmente piu' esplicative del semplice testo
+* Eseguire unit test delle funzioni in ```utils.py```
+* (Nuovo) Aggiungere check automatico PEP8 e dello spelling anche negli script python
 
 **Commit 6 2020-05-03:** <br>
 * aggiunti appunti del quarto video
