@@ -93,7 +93,7 @@ def calc_layer_by_neurons(t_inputs, t_neurons):
 
 def calc_layer_by_props(t_inputs, t_m_weights, t_biases):
     """
-    Calculates the output af a layer by passing the input data, a matrix with weights and biases.
+    Calculates the output of a layer by passing the input data, a matrix with weights and biases.
 
     First it checks if the array of weights has one set per each bias (so one for each neuron...)
     and then a for loop creates the dictionaries to pass to the calc_layer_by_neurons() function.
@@ -136,12 +136,12 @@ def calc_layer_by_props(t_inputs, t_m_weights, t_biases):
 
 def calc_batches_layer_by_props(t_m_inputs, t_m_weights, t_biases):
     """
-    Calculates the output af a layer by passing batches of input data, a matrix with weights and biases.
+    Calculates the output of a layer by passing batches of input data, a matrix with weights and biases.
 
     The function loops for each sample in the batch of inputs and calls the calc_layer_by_props() function
     to get the outputs of a layer.
 
-    Each output of the layers is saved and then returned by the functio.
+    Each output of the layers is saved and then returned by the function.
 
     :param list t_m_inputs: list of lists, batches of input data
     :param list t_m_weights: list of lists, each row is a set of connection weights to a neuron

@@ -1,0 +1,26 @@
+name: PEP8
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # download the repository
+    - name: Download repository
+      uses: actions/checkout@v2
+
+    # Install Python
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+
+    # Install and check PEP8 using flake8
+    - name: Execute Python Test
+      run: |
+        pip install flake8
+        cd code
+        flake8 --max-line-length=120

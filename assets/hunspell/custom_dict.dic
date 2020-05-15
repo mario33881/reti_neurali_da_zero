@@ -1,8 +1,13 @@
-61 custom_dict-wordlist.txt
+81 custom_dict-wordlist.txt
+ActivationReLU
 adattera
+assertEqual
+assertRaises
 BbI
+boold
 br
 bU
+calc
 changelog
 Changelog
 cioe
@@ -10,6 +15,7 @@ comodita
 dall
 dara
 def
+dict
 dMEP
 elif
 gia
@@ -18,6 +24,9 @@ hr
 hunspell
 imparera
 init
+int
+LayerDense
+len
 lGLto
 lol
 lolol
@@ -28,6 +37,7 @@ nnfs
 np
 numpy
 ottimizzatore
+param
 parita
 perche
 piu
@@ -44,19 +54,29 @@ relu
 Relu
 ReLU
 restituira
+rnd
+rtype
 sentdex
 Sentdex
 sh
+skipTest
 stat
 svg
+TestCase
 testscripts
+TestUtils
 TEWy
 tMrbN
+todo
+TODO
 txt
+unittest
 utils
+ValueError
 verra
 vZcxW
 Wo
 Xd
 yml
 Youtube
+Zenaro

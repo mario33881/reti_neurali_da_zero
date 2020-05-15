@@ -1104,6 +1104,13 @@ activation1.forward(layer1.output)
 
 ## Changelog
 
+**Commit 8 2020-05-15:** <br>
+* Aggiunti alcuni unit test per ```utils.py``` (script ```utils_unittest.py```)
+* Aggiunto check automatico PEP8 e dello spelling negli script python (aggiunto workflow ```pep8.yml```)
+### idee/todo
+* aggiungere altre immagini al README.md
+* Aggiungere altri unit test per ```utils.py```
+
 **Commit 7 2020-05-15:** <br>
 * aggiunti appunti quinto video
 * aggiunto script bash ```testscripts.sh```per eseguire tutti gli script

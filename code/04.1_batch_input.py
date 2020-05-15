@@ -101,14 +101,14 @@ biases = [2,   # errore statistico neurone 1
 if __name__ == "__main__":
     
     # converto la lista di pesi in un array numpy
-    numpy_weigths = np.array(weights)
+    numpy_weights = np.array(weights)
 
     # scambio righe e colonne (eseguo "transpose")
     # per evitare l'errore di shape
-    transposed_weigths = numpy_weigths.T
+    transposed_weights = numpy_weights.T
     
     # prodotto interno tra matrici input e pesi (righe e colonne scambiate)
-    output = np.dot(inputs, transposed_weigths) + biases
+    output = np.dot(inputs, transposed_weights) + biases
 
     if boold:
         print("Output:")
